@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conect Gandra's 2026 - O Legado Entra em Campo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Inter:wght@300;400;600&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f9ff;
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            height: 300px;
+            margin: 0 auto;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.90);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+        }
+
+        .nav-active {
+            background: linear-gradient(90deg, #0ea5e9 0%, #0284c7 100%);
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(14, 165, 233, 0.3);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <div id="app" class="min-h-screen flex flex-col md:flex-row">
+
+        <!-- CABEÇALHO MOBILE (Com Logo Pequena) -->
+        <div class="md:hidden bg-slate-900 text-white p-4 flex justify-between items-center sticky top-0 z-50 shadow-lg">
+            <div class="flex items-center gap-3">
+                <!-- LOGO AQUI -->
+                <img src="logo.png" alt="Logo" class="h-10 w-auto rounded-full border border-cyan-500 shadow-md bg-white">
+                <div class="flex flex-col">
+                    <span class="font-bold text-lg tracking-wider">CONECT GANDRA'S</span>
+                    <span class="text-[10px] text-cyan-400 font-semibold tracking-wide">2026 • O LEGADO</span>
+                </div>
+            </div>
+            <button id="mobile-menu-btn" class="text-2xl text-cyan-400 p-1">☰</button>
+        </div>
+
+        <!-- SIDEBAR (Com Logo Grande) -->
+        <nav id="sidebar" class="hidden md:flex flex-col w-64 bg-white/80 backdrop-blur-md border-r border-slate-200 h-screen sticky top-0 p-6 z-40 transition-transform shadow-sm">
+            <div class="mb-8 text-center">
+                <!-- LOGO GRANDE AQUI -->
+                <div class="relative inline-block group">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-cyan-400 to-blue-600 rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+                    <img src="logo.png" alt="Logo Conect Gandra's" class="relative h-32 w-32 mx-auto rounded-full border-4 border-white shadow-xl object-cover">
+                </div>
+                
+                <h1 class="text-2xl font-extrabold leading-tight tracking-tight text-slate-900 mt-4">
+                    CONECT<br>
+                    <span class="text-cyan-600">GANDRA'S 2026</span>
+                </h1>
+                <p class="text-[11px] text-slate-500 mt-2 italic font-medium px-2">"O Nosso Legado Entra em Campo"</p>
+            </div>
+
+            <ul class="space-y-2 flex-1">
+                <li><button onclick="navigateTo('overview')" class="nav-item w-full text-left px-4 py-3 rounded-lg hover:bg-slate-50 transition-all font-medium nav-active" data-target="overview">🏠 Visão Geral</button></li>
+                <li><button onclick="navigateTo('timeline')" class="nav-item w-full text-left px-4 py-3 rounded-lg hover:bg-slate-50 transition-all font-medium" data-target="timeline">📅 Cronograma</button></li>
+                <li><button onclick="navigateTo('committees')" class="nav-item w-full text-left px-4 py-3 rounded-lg hover:bg-slate-50 transition-all font-medium" data-target="committees">👥 Comitês</button></li>
+                <li><button onclick="navigateTo('itinerary')" class="nav-item w-full text-left px-4 py-3 rounded-lg hover:bg-slate-50 transition-all font-medium" data-target="itinerary">⚽ Roteiro do Dia</button></li>
+                <li><button onclick="navigateTo('budget')" class="nav-item w-full text-left px-4 py-3 rounded-lg hover:bg-slate-50 transition-all font-medium" data-target="budget">💰 Financeiro</button></li>
+            </ul>
+
+            <div class="mt-auto pt-6 border-t border-slate-100">
+                <div class="text-xs text-slate-400 text-center">Status: <span class="text-yellow-700 font-bold bg-yellow-100 px-2 py-1 rounded-full border border-yellow-200">🟡 Em Planejamento</span></div>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 p-4 md:p-8 overflow-y-auto bg-gradient-to-br from-slate-50 to-blue-50">
+            
+            <!-- SECTION: OVERVIEW -->
+            <section id="overview" class="page-section space-y-6">
+                <header class="mb-8 p-6 rounded-2xl bg-white shadow-sm border border-slate-100 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-cyan-100 rounded-full mix-blend-multiply filter blur-2xl opacity-70 -translate-y-10 translate-x-10"></div>
+                    <div class="relative z-10">
+                        <h2 class="text-4xl font-black text-slate-800 mb-2">Painel de Controle</h2>
+                        <h3 class="text-xl text-cyan-700 font-semibold tracking-wide">CONECT GANDRA'S 2026</h3>
+                        <p class="text-slate-500 mt-2">Bem-vindo à central de organização do nosso legado.</p>
+                    </div>
+                </header>
+
+                <!-- Hero Stats -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="glass-panel p-6 rounded-xl border-t-4 border-blue-600 hover:shadow-lg transition-shadow">
+                        <div class="text-xs text-slate-500 uppercase tracking-wide font-bold">Data Oficial</div>
+                        <div class="text-3xl font-bold mt-2 text-slate-800">19 Abril</div>
+                        <div class="text-sm text-blue-600 font-bold mt-1">2026 • Domingo</div>
+                    </div>
+                    
+                    <div class="glass-panel p-6 rounded-xl border-t-4 border-cyan-500 hover:shadow-lg transition-shadow relative overflow-hidden">
+                        <div class="text-xs text-slate-500 uppercase tracking-wide font-bold">Contagem Regressiva</div>
+                        <div id="countdown" class="text-4xl font-mono font-bold mt-2 text-cyan-700">...</div>
+                        <div class="text-sm text-cyan-600 mt-1">dias para o encontro</div>
+                    </div>
+
+                    <div class="glass-panel p-6 rounded-xl border-t-4 border-slate-800 hover:shadow-lg transition-shadow">
+                        <div class="text-xs text-slate-500 uppercase tracking-wide font-bold">Local Confirmado</div>
+                        <div class="text-xl font-bold mt-2 text-slate-800 leading-tight">Estádio Amaral Peixoto</div>
+                        <div class="text-sm text-slate-500 mt-1">São Fidélis/RJ</div>
+                    </div>
+                </div>
+
+                <!-- Quick Pendencies -->
+                <div class="glass-panel rounded-xl p-6 mt-6 border border-slate-200">
+                    <h3 class="text-xl font-bold mb-4 flex items-center text-slate-800">
+                        <span class="mr-2 bg-yellow-100 p-1 rounded text-lg">🔔</span> Ações Prioritárias
+                    </h3>
+                    <div id="quick-tasks" class="space-y-3">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION: TIMELINE -->
+            <section id="timeline" class="page-section hidden space-y-6">
+                <header class="mb-8">
+                    <h2 class="text-3xl font-bold text-slate-800">Cronograma</h2>
+                    <p class="text-slate-600">Acompanhe as fases de organização do Conect Gandra's 2026.</p>
+                </header>
+
+                <div class="flex flex-wrap gap-2 mb-6">
+                    <button onclick="filterTimeline('all')" class="px-5 py-2 rounded-full bg-slate-800 text-white text-sm hover:bg-slate-700 transition font-medium shadow-md">Todas</button>
+                    <button onclick="filterTimeline('fase1')" class="px-5 py-2 rounded-full bg-white border border-slate-200 text-slate-600 text-sm hover:bg-slate-50 transition font-medium">Fase 1: Lançamento</button>
+                    <button onclick="filterTimeline('fase2')" class="px-5 py-2 rounded-full bg-white border border-slate-200 text-slate-600 text-sm hover:bg-slate-50 transition font-medium">Fase 2: Consolidação</button>
+                    <button onclick="filterTimeline('fase3')" class="px-5 py-2 rounded-full bg-white border border-slate-200 text-slate-600 text-sm hover:bg-slate-50 transition font-medium">Fase 3: Reta Final</button>
+                </div>
+
+                <div class="relative border-l-2 border-cyan-200 ml-3 space-y-8" id="timeline-container">
+                    <!-- Timeline items injected via JS -->
+                </div>
+            </section>
+
+            <!-- SECTION: COMMITTEES -->
+            <section id="committees" class="page-section hidden space-y-6">
+                <header class="mb-8">
+                    <h2 class="text-3xl font-bold text-slate-800">Comitês Organizadores</h2>
+                    <p class="text-slate-600">Equipes responsáveis pelo sucesso do evento.</p>
+                </header>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="committees-grid">
+                    <!-- Committee Cards injected via JS -->
+                </div>
+            </section>
+
+            <!-- SECTION: ITINERARY (NO DIA) -->
+            <section id="itinerary" class="page-section hidden space-y-6">
+                <header class="mb-8">
+                    <h2 class="text-3xl font-bold text-slate-800">Roteiro do Dia</h2>
+                    <p class="text-slate-600 font-medium text-lg italic">"O Nosso Legado Entra em Campo"</p>
+                </header>
+
+                <div class="glass-panel rounded-xl overflow-hidden shadow-sm">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-50 border-b border-slate-200 text-xs uppercase text-slate-500 font-bold tracking-wider">
+                                    <th class="p-5 w-24">Horário</th>
+                                    <th class="p-5 w-1/3">Atividade</th>
+                                    <th class="p-5">Detalhes</th>
+                                </tr>
+                            </thead>
+                            <tbody id="itinerary-table-body" class="text-sm divide-y divide-slate-100">
+                                <!-- Table rows injected via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION: BUDGET -->
+            <section id="budget" class="page-section hidden space-y-6">
+                <header class="mb-8">
+                    <h2 class="text-3xl font-bold text-slate-800">Financeiro</h2>
+                    <p class="text-slate-600">Transparência nos custos do evento.</p>
+                </header>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Chart Column -->
+                    <div class="lg:col-span-1 glass-panel p-6 rounded-xl flex flex-col items-center justify-center border border-slate-200">
+                        <h3 class="text-lg font-bold mb-4 text-slate-700">Distribuição Estimada</h3>
+                        <div class="chart-container">
+                            <canvas id="budgetChart"></canvas>
+                        </div>
+                        <p class="text-xs text-center text-slate-400 mt-4 italic">Dados preliminares de planejamento.</p>
+                    </div>
+
+                    <!-- Table Column -->
+                    <div class="lg:col-span-2 glass-panel p-6 rounded-xl border border-slate-200">
+                        <h3 class="text-lg font-bold mb-4 text-slate-700">Detalhamento de Investimento</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm">
+                                <thead class="bg-slate-50 text-slate-500 font-bold uppercase text-xs">
+                                    <tr>
+                                        <th class="p-3 text-left rounded-l-lg">Item</th>
+                                        <th class="p-3 text-right">Custo Est. (R$)</th>
+                                        <th class="p-3 text-left rounded-r-lg pl-6">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100">
+                                    <tr>
+                                        <td class="p-3 font-medium text-slate-700">Locação Estádio</td>
+                                        <td class="p-3 text-right text-slate-600">R$ 0,00</td>
+                                        <td class="p-3 pl-6"><span class="bg-yellow-100 text-yellow-700 py-1 px-2 rounded text-xs font-semibold">A cotar</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-medium text-slate-700">Churrasqueiro Profissional</td>
+                                        <td class="p-3 text-right text-slate-600">R$ 0,00</td>
+                                        <td class="p-3 pl-6"><span class="bg-red-100 text-red-700 py-1 px-2 rounded text-xs font-semibold">Prioridade</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-medium text-slate-700">Alimentação & Bebidas</td>
+                                        <td class="p-3 text-right text-slate-600">R$ 0,00</td>
+                                        <td class="p-3 pl-6"><span class="bg-slate-100 text-slate-500 py-1 px-2 rounded text-xs font-semibold">Pendente</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 font-medium text-slate-700">Estrutura (Mesas/Som)</td>
+                                        <td class="p-3 text-right text-slate-600">R$ 0,00</td>
+                                        <td class="p-3 pl-6"><span class="bg-slate-100 text-slate-500 py-1 px-2 rounded text-xs font-semibold">Pendente</span></td>
+                                    </tr>
+                                    <tr class="bg-cyan-50/50">
+                                        <td class="p-3 font-bold text-cyan-900 rounded-l-lg">TOTAL ESTIMADO</td>
+                                        <td class="p-3 text-right font-bold text-cyan-900">R$ 0,00</td>
+                                        <td class="p-3 rounded-r-lg"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        // --- DADOS (BASE DE DADOS) ---
+        const eventDate = new Date('2026-04-19T09:00:00');
+        
+        const tasks = [
+            { id: 1, text: "Validar data com a administração do Estádio Amaral Peixoto", done: false },
+            { id: 2, text: "Criar grupo WhatsApp 'Comissão Conect Gandra's 2026' (Admins)", done: false },
+            { id: 3, text: "Criar grupo WhatsApp 'Torcida Conect Gandra's 2026' (Geral)", done: false },
+            { id: 4, text: "Definir valor da cota inicial (Lote 1)", done: false }
+        ];
+
+        const timelineEvents = [
+            { date: "01/10/2025", title: "Lançamento Oficial: Save the Date", phase: "fase1", status: "pending" },
+            { date: "01/11/2025", title: "Abertura Lote 1", phase: "fase1", status: "pending" },
+            { date: "15/12/2025", title: "Primeira parcial de inscritos", phase: "fase1", status: "pending" },
+            { date: "15/01/2026", title: "Contratação Churrasqueiro/Som", phase: "fase2", status: "pending" },
+            { date: "20/02/2026", title: "Início Lote 2", phase: "fase2", status: "pending" },
+            { date: "15/03/2026", title: "Lista Final de Presença", phase: "fase2", status: "pending" },
+            { date: "01/04/2026", title: "Compras Não-Perecíveis", phase: "fase3", status: "pending" },
+            { date: "10/04/2026", title: "Divulgação dos Times", phase: "fase3", status: "pending" },
+            { date: "18/04/2026", title: "Preparação Final no Estádio", phase: "fase3", status: "pending" }
+        ];
+
+        const committees = [
+            {
+                name: "💰 Financeiro & Suprimentos",
+                meta: "Caixa positivo e compras inteligentes",
+                items: ["Definir custo per capita", "Abrir conta/PIX exclusiva", "Controle de Lotes", "Planilha de fluxo"]
+            },
+            {
+                name: "⚽ Esportivo (O Jogo)",
+                meta: "Organizar a partida e gincana",
+                items: ["Reserva do Campo", "Escalação dos Times", "Coletes Personalizados", "Árbitro e Premiação"]
+            },
+            {
+                name: "🍽️ Festivo & Gastronomia",
+                meta: "Alimentação farta e de qualidade",
+                items: ["Churrasqueiro Profissional", "Definir Cardápio", "Locação de Mesas", "Playlist & Bingo"]
+            },
+            {
+                name: "🙏 Liturgia & Homenagem",
+                meta: "Espírito, gratidão e memória",
+                items: ["Convidar orador", "Selecionar louvores", "Organizar 'In Memoriam'"]
+            }
+        ];
+
+        const itinerary = [
+            { time: "09:00", activity: "Check-in & Café Raiz", details: "Entrega de pulseiras, música ambiente." },
+            { time: "09:40", activity: "Culto de Gratidão", details: "Louvor e Momento In Memoriam." },
+            { time: "10:30", activity: "Abertura Solene", details: "Hino Nacional e Foto Oficial no gramado." },
+            { time: "10:45", activity: "O Clássico: A Bola Rola", details: "Internacional vs. Fidelense (2x 25min)." },
+            { time: "11:45", activity: "Gincana da Família", details: "Cabo de guerra e atividades interativas." },
+            { time: "12:30", activity: "Almoço: Churrasco", details: "Buffet liberado e confraternização." },
+            { time: "14:00", activity: "Resenha & Lazer", details: "Tempo livre para conversa e fotos." },
+            { time: "15:00", activity: "Bingo & Sorteios", details: "Dinâmicas para todas as idades." },
+            { time: "16:00", activity: "Parabéns Coletivo", details: "Bolo oficial e café da tarde." },
+            { time: "17:00", activity: "Encerramento", details: "Oração final e lembrancinhas." }
+        ];
+
+        // --- FUNÇÕES ---
+
+        function updateCountdown() {
+            const now = new Date();
+            const diff = eventDate - now;
+            
+            if (diff > 0) {
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                document.getElementById('countdown').innerText = days;
+            } else {
+                document.getElementById('countdown').innerText = "HOJE!";
+            }
+        }
+
+        function renderQuickTasks() {
+            const container = document.getElementById('quick-tasks');
+            container.innerHTML = tasks.map(task => `
+                <div class="flex items-start bg-white p-3 rounded-lg border border-slate-100 shadow-sm hover:shadow-md transition cursor-pointer group" onclick="toggleTask(${task.id})">
+                    <div class="flex-shrink-0 mt-0.5">
+                        <div class="w-5 h-5 rounded border ${task.done ? 'bg-cyan-500 border-cyan-500' : 'border-slate-300 group-hover:border-cyan-400'} flex items-center justify-center text-white text-xs transition-colors">
+                            ${task.done ? '✓' : ''}
+                        </div>
+                    </div>
+                    <div class="ml-3 text-sm ${task.done ? 'text-slate-400 line-through' : 'text-slate-700 font-medium'}">${task.text}</div>
+                </div>
+            `).join('');
+        }
+
+        function toggleTask(id) {
+            const task = tasks.find(t => t.id === id);
+            if (task) {
+                task.done = !task.done;
+                renderQuickTasks();
+            }
+        }
+
+        function renderTimeline(filter = 'all') {
+            const container = document.getElementById('timeline-container');
+            const filteredEvents = filter === 'all' ? timelineEvents : timelineEvents.filter(e => e.phase === filter);
+            
+            container.innerHTML = filteredEvents.map(event => `
+                <div class="relative pl-8 animate-fade-in group">
+                    <div class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-white border-4 border-cyan-500 group-hover:scale-110 transition-transform shadow-sm"></div>
+                    <div class="text-xs font-bold text-cyan-600 uppercase tracking-wider mb-1">${event.phase.replace('fase', 'Fase ')}</div>
+                    <div class="glass-panel p-4 rounded-lg hover:border-cyan-300 transition-colors">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="font-bold text-slate-800">${event.title}</h4>
+                                <p class="text-sm text-slate-500 mt-1">📅 ${event.date}</p>
+                            </div>
+                            <span class="px-2 py-1 bg-slate-100 text-slate-500 text-xs rounded-full font-medium">Aguardando</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterTimeline(phase) {
+            renderTimeline(phase);
+        }
+
+        function renderCommittees() {
+            const container = document.getElementById('committees-grid');
+            container.innerHTML = committees.map(c => `
+                <div class="glass-panel p-6 rounded-xl hover:shadow-md transition-all border-l-4 border-transparent hover:border-cyan-500">
+                    <h3 class="text-xl font-bold text-slate-900 mb-2">${c.name}</h3>
+                    <p class="text-sm text-cyan-700 font-semibold mb-4 bg-cyan-50 inline-block px-2 py-1 rounded">🎯 ${c.meta}</p>
+                    <ul class="space-y-2">
+                        ${c.items.map(item => `
+                            <li class="flex items-center text-sm text-slate-600">
+                                <span class="w-1.5 h-1.5 bg-slate-300 rounded-full mr-2"></span>
+                                ${item}
+                            </li>
+                        `).join('')}
+                    </ul>
+                </div>
+            `).join('');
+        }
+
+        function renderItinerary() {
+            const tbody = document.getElementById('itinerary-table-body');
+            tbody.innerHTML = itinerary.map(item => `
+                <tr class="hover:bg-slate-50 transition-colors">
+                    <td class="p-4 font-mono font-bold text-blue-900 border-r border-slate-100">${item.time}</td>
+                    <td class="p-4 font-semibold text-slate-800">${item.activity}</td>
+                    <td class="p-4 text-slate-600 italic">${item.details}</td>
+                </tr>
+            `).join('');
+        }
+
+        function initBudgetChart() {
+            const ctx = document.getElementById('budgetChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Locação', 'Alimentação', 'Bebidas', 'Decor/Estrutura', 'Outros'],
+                    datasets: [{
+                        data: [10, 45, 25, 10, 10], // Porcentagens estimadas
+                        backgroundColor: [
+                            '#64748b', // Slate 500
+                            '#ef4444', // Red 500 (Carne)
+                            '#f59e0b', // Amber 500 (Bebida)
+                            '#0ea5e9', // Cyan 500
+                            '#10b981'  // Emerald 500
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': Estimativa';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function navigateTo(targetId) {
+            document.querySelectorAll('.page-section').forEach(el => el.classList.add('hidden'));
+            document.getElementById(targetId).classList.remove('hidden');
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('nav-active'));
+            document.querySelector(`[data-target="${targetId}"]`).classList.add('nav-active');
+            
+            if (window.innerWidth < 768) {
+                const sidebar = document.getElementById('sidebar');
+                if(!sidebar.classList.contains('hidden')) {
+                     sidebar.classList.add('hidden');
+                }
+            }
+        }
+
+        // --- INICIALIZAÇÃO ---
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCountdown();
+            renderQuickTasks();
+            renderTimeline('all');
+            renderCommittees();
+            renderItinerary();
+            initBudgetChart();
+            
+            const mobileBtn = document.getElementById('mobile-menu-btn');
+            const sidebar = document.getElementById('sidebar');
+            
+            mobileBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('hidden');
+                sidebar.classList.toggle('absolute');
+                sidebar.classList.toggle('z-50');
+                sidebar.classList.toggle('w-full');
+            });
+        });
+
+    </script>
+</body>
+</html>
