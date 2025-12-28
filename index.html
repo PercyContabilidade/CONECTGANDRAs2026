@@ -56,8 +56,9 @@
         <!-- CABEÇALHO MOBILE -->
         <div class="md:hidden bg-slate-900 text-white p-4 flex justify-between items-center sticky top-0 z-50 shadow-lg">
             <div class="flex items-center gap-3">
-                <!-- LOGO PEQUENA: Caminho Relativo -->
+                <!-- LOGO PEQUENA -->
                 <img src="./logo.png" 
+                     onerror="this.style.display='none'"
                      alt="Logo Conect Gandra's" 
                      class="h-10 w-10 rounded-full border border-cyan-500 shadow-md bg-white object-cover">
                 <div class="flex flex-col">
@@ -71,10 +72,11 @@
         <!-- SIDEBAR -->
         <nav id="sidebar" class="hidden md:flex flex-col w-64 bg-white/80 backdrop-blur-md border-r border-slate-200 h-screen sticky top-0 p-6 z-40 transition-transform shadow-sm">
             <div class="mb-8 text-center">
-                <!-- LOGO GRANDE: Caminho Relativo -->
+                <!-- LOGO GRANDE -->
                 <div class="relative inline-block group">
                     <div class="absolute -inset-1 bg-gradient-to-r from-cyan-400 to-blue-600 rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
                     <img src="./logo.png" 
+                         onerror="this.src='https://placehold.co/200x200?text=LOGO';"
                          alt="Logo Conect Gandra's" 
                          class="relative h-32 w-32 mx-auto rounded-full border-4 border-white shadow-xl object-cover">
                 </div>
@@ -134,14 +136,44 @@
                     </div>
                 </div>
 
-                <!-- Quick Pendencies -->
-                <div class="glass-panel rounded-xl p-6 mt-6 border border-slate-200">
-                    <h3 class="text-xl font-bold mb-4 flex items-center text-slate-800">
-                        <span class="mr-2 bg-yellow-100 p-1 rounded text-lg">🔔</span> Ações Prioritárias
-                    </h3>
-                    <div id="quick-tasks" class="space-y-3">
-                        <!-- Populated by JS -->
+                <!-- ÁREA DIVIDIDA: Pendências + KIT DIVULGAÇÃO -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+                    
+                    <!-- Coluna da Esquerda: Tarefas (Ocupa 2/3) -->
+                    <div class="lg:col-span-2 glass-panel rounded-xl p-6 border border-slate-200">
+                        <h3 class="text-xl font-bold mb-4 flex items-center text-slate-800">
+                            <span class="mr-2 bg-yellow-100 p-1 rounded text-lg">🔔</span> Ações Prioritárias
+                        </h3>
+                        <div id="quick-tasks" class="space-y-3">
+                            <!-- Populated by JS -->
+                        </div>
                     </div>
+
+                    <!-- Coluna da Direita: KIT DIVULGAÇÃO (Ocupa 1/3) -->
+                    <div class="lg:col-span-1 glass-panel rounded-xl p-6 border border-cyan-200 bg-gradient-to-b from-white to-cyan-50 flex flex-col items-center text-center">
+                        <h3 class="text-lg font-bold text-slate-800 mb-2">📢 Kit Divulgação</h3>
+                        <p class="text-xs text-slate-500 mb-4">Baixe o convite e poste no status!</p>
+                        
+                        <!-- Preview do Convite -->
+                        <div class="w-32 h-56 bg-slate-200 rounded-lg shadow-md mb-4 overflow-hidden relative group cursor-pointer border-2 border-white">
+                            <img src="./convite.png" 
+                                 onerror="this.src='https://placehold.co/108x192?text=Sem+Imagem'; this.parentElement.style.opacity='0.5';"
+                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
+                                 alt="Preview Convite">
+                            <div class="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                <span class="text-white text-xs font-bold">Ver</span>
+                            </div>
+                        </div>
+
+                        <!-- Botão Download -->
+                        <a href="./convite.png" download="Convite_ConectGandra2026.png" class="w-full py-2 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg font-bold text-sm shadow-md transition-colors flex items-center justify-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                            </svg>
+                            Baixar Convite
+                        </a>
+                    </div>
+
                 </div>
             </section>
 
