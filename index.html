@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Conect Gandra's 2026 - Central de Inscrição</title>
+    <title>Conect Gandra's 2026 - Hub Oficial</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-    <!-- Font Awesome para ícones de WhatsApp/Cópia -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -35,21 +34,39 @@
             color: white;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* Botão de Música */
+        .music-btn {
+            position: fixed; bottom: 20px; right: 20px; z-index: 100;
+            background: white; border-radius: 50%; width: 50px; height: 50px;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2); cursor: pointer; transition: all 0.3s ease;
+            border: 2px solid #0ea5e9; color: #0ea5e9;
         }
+        .music-btn:hover { transform: scale(1.1); }
+        .music-playing { animation: pulse-music 2s infinite; background: #0ea5e9; color: white; border: 2px solid white; }
+
+        @keyframes pulse-music {
+            0% { box-shadow: 0 0 0 0 rgba(14, 165, 233, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(14, 165, 233, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(14, 165, 233, 0); }
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .animate-fade-in { animation: fadeIn 0.5s ease-out forwards; }
     </style>
 </head>
 <body class="text-slate-800">
+
+    <!-- ÁUDIO -->
+    <audio id="bgMusic" loop><source src="./musica.mp3" type="audio/mpeg"></audio>
+    <div id="musicToggle" class="music-btn" onclick="toggleMusic()" title="Som"><i class="fas fa-play" id="musicIcon"></i></div>
 
     <div id="app" class="min-h-screen flex flex-col md:flex-row">
 
         <!-- CABEÇALHO MOBILE -->
         <div class="md:hidden bg-slate-900 text-white p-4 flex justify-between items-center sticky top-0 z-50 shadow-lg">
             <div class="flex items-center gap-3">
-                <img src="./logo.png" onerror="this.style.display='none'" alt="Logo" class="h-10 w-10 rounded-full border border-cyan-500 bg-white object-cover">
+                <img src="./logo.png" onerror="this.style.display='none'" class="h-10 w-10 rounded-full border border-cyan-500 bg-white object-cover">
                 <div class="flex flex-col">
                     <span class="font-bold text-lg tracking-wider">CONECT GANDRA'S</span>
                     <span class="text-[9px] text-cyan-400 font-semibold">GESTÃO: WALLAS GANDRA</span>
@@ -58,36 +75,30 @@
             <button id="mobile-menu-btn" class="text-2xl text-cyan-400 p-1"><i class="fas fa-bars"></i></button>
         </div>
 
-        <!-- SIDEBAR (MENU LATERAL) -->
+        <!-- SIDEBAR -->
         <nav id="sidebar" class="hidden md:flex flex-col w-64 bg-white/90 backdrop-blur-md border-r border-slate-200 h-screen sticky top-0 p-6 z-40 transition-transform shadow-sm">
             <div class="mb-6 text-center">
-                <!-- LOGO GRANDE -->
                 <div class="relative inline-block group mb-4">
                     <div class="absolute -inset-1 bg-gradient-to-r from-cyan-400 to-blue-600 rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
-                    <img src="./logo.png" onerror="this.src='https://placehold.co/200x200?text=LOGO';" alt="Logo" class="relative h-28 w-28 mx-auto rounded-full border-4 border-white shadow-xl object-cover">
+                    <img src="./logo.png" onerror="this.src='https://placehold.co/200x200?text=LOGO';" class="relative h-28 w-28 mx-auto rounded-full border-4 border-white shadow-xl object-cover">
                 </div>
-                
-                <h1 class="text-xl font-extrabold leading-tight text-slate-900">
-                    CONECT<br><span class="text-cyan-600">GANDRA'S 2026</span>
-                </h1>
+                <h1 class="text-xl font-extrabold leading-tight text-slate-900">CONECT<br><span class="text-cyan-600">GANDRA'S 2026</span></h1>
             </div>
 
-            <!-- BLOCO DO GESTOR (Novo Insight) -->
+            <!-- BLOCO GESTOR -->
             <div class="mb-6 p-3 bg-slate-50 rounded-lg border border-slate-200 text-center">
                 <p class="text-[10px] uppercase text-slate-500 font-bold tracking-wider mb-1">Gestor Organizador Líder</p>
                 <div class="flex items-center justify-center gap-2">
                     <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
                     <p class="text-sm font-bold text-slate-800">Wallas Gandra</p>
                 </div>
-                <a href="https://wa.me/5522998905592" target="_blank" class="text-xs text-blue-600 hover:underline mt-1 block">
-                    <i class="fab fa-whatsapp"></i> (22) 99890-5592
-                </a>
+                <a href="https://wa.me/5522998905592" target="_blank" class="text-xs text-blue-600 hover:underline mt-1 block"><i class="fab fa-whatsapp"></i> (22) 99890-5592</a>
             </div>
 
             <ul class="space-y-1 flex-1 text-sm">
                 <li><button onclick="navigateTo('overview')" class="nav-item w-full text-left px-4 py-3 rounded-lg font-medium nav-active" data-target="overview">🏠 Início & Inscrição</button></li>
+                <li><button onclick="navigateTo('agenda')" class="nav-item w-full text-left px-4 py-3 rounded-lg hover:bg-slate-50 transition-all font-medium" data-target="agenda">⏱️ Agenda do Dia</button></li>
                 <li><button onclick="navigateTo('timeline')" class="nav-item w-full text-left px-4 py-3 rounded-lg hover:bg-slate-50 transition-all font-medium" data-target="timeline">📅 Cronograma</button></li>
-                <li><button onclick="navigateTo('itinerary')" class="nav-item w-full text-left px-4 py-3 rounded-lg hover:bg-slate-50 transition-all font-medium" data-target="itinerary">⚽ Roteiro do Dia</button></li>
                 <li><button onclick="navigateTo('budget')" class="nav-item w-full text-left px-4 py-3 rounded-lg hover:bg-slate-50 transition-all font-medium" data-target="budget">💰 Transparência</button></li>
             </ul>
 
@@ -99,9 +110,8 @@
         <!-- ÁREA PRINCIPAL -->
         <main class="flex-1 p-4 md:p-8 overflow-y-auto bg-gradient-to-br from-slate-50 to-blue-50">
             
-            <!-- SECTION: VISÃO GERAL & INSCRIÇÃO -->
+            <!-- SECTION: VISÃO GERAL -->
             <section id="overview" class="page-section space-y-6">
-                <!-- Banner de Boas Vindas -->
                 <header class="p-6 rounded-2xl bg-white shadow-sm border border-slate-100 relative overflow-hidden">
                     <div class="absolute top-0 right-0 w-32 h-32 bg-cyan-100 rounded-full mix-blend-multiply filter blur-2xl opacity-70 -translate-y-10 translate-x-10"></div>
                     <div class="relative z-10">
@@ -110,44 +120,32 @@
                     </div>
                 </header>
 
-                <!-- GRID PRINCIPAL: 2 Colunas (Esq: Inscrição / Dir: Convite) -->
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     
-                    <!-- COLUNA 1: CENTRAL DE INSCRIÇÃO (Ocupa 2 espaços) -->
+                    <!-- COLUNA 1: CENTRAL DE INSCRIÇÃO & CAMISETA (Ocupa 2 espaços) -->
                     <div class="lg:col-span-2 space-y-6">
                         
-                        <!-- CARD 1: Passos para Inscrição -->
+                        <!-- CARD INSCRIÇÃO -->
                         <div class="glass-panel rounded-xl p-6 border-l-4 border-cyan-500">
-                            <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center">
-                                <i class="fas fa-rocket mr-2 text-cyan-600"></i> Passo a Passo da Inscrição
-                            </h3>
-                            
+                            <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center"><i class="fas fa-rocket mr-2 text-cyan-600"></i> Passo a Passo da Inscrição</h3>
                             <div class="space-y-4">
-                                <!-- Passo 1: WhatsApp -->
                                 <div class="flex gap-4 items-start">
                                     <div class="bg-slate-100 text-slate-600 font-bold w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">1</div>
                                     <div class="flex-1">
                                         <h4 class="font-bold text-slate-800">Entre no Grupo Oficial</h4>
                                         <p class="text-xs text-slate-500 mb-2">Fale com o gestor Wallas para confirmar presença.</p>
-                                        <a href="https://wa.me/5522998905592?text=Olá Wallas! Quero me inscrever no Conect Gandra 2026." target="_blank" class="whatsapp-btn px-4 py-2 rounded-lg text-sm font-bold shadow-md hover:opacity-90 inline-flex items-center gap-2">
-                                            <i class="fab fa-whatsapp"></i> Inscrição via WhatsApp
-                                        </a>
+                                        <a href="https://wa.me/5522998905592?text=Olá Wallas! Quero me inscrever no Conect Gandra 2026." target="_blank" class="whatsapp-btn px-4 py-2 rounded-lg text-sm font-bold shadow-md hover:opacity-90 inline-flex items-center gap-2"><i class="fab fa-whatsapp"></i> Inscrição via WhatsApp</a>
                                     </div>
                                 </div>
-
-                                <!-- Passo 2: Taxa de Inscrição -->
                                 <div class="flex gap-4 items-start">
                                     <div class="bg-slate-100 text-slate-600 font-bold w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">2</div>
                                     <div class="flex-1">
                                         <h4 class="font-bold text-slate-800">Taxa de Adesão (R$ 10,00)</h4>
                                         <p class="text-xs text-slate-500 mb-2">Garanta sua vaga transferindo a taxa inicial via PIX.</p>
-                                        
                                         <div class="flex items-center gap-2 bg-slate-100 p-2 rounded-lg max-w-sm border border-slate-200">
                                             <i class="fas fa-key text-slate-400 ml-1"></i>
                                             <input type="text" value="22998905592" id="pixInput" class="bg-transparent border-none text-sm font-mono text-slate-700 w-full focus:outline-none" readonly>
-                                            <button onclick="copyPix()" class="bg-white hover:bg-slate-50 text-cyan-600 font-bold py-1 px-3 rounded text-xs border border-slate-200 shadow-sm transition-colors">
-                                                Copiar
-                                            </button>
+                                            <button onclick="copyPix()" class="bg-white hover:bg-slate-50 text-cyan-600 font-bold py-1 px-3 rounded text-xs border border-slate-200 shadow-sm transition-colors">Copiar</button>
                                         </div>
                                         <p id="copyMsg" class="text-[10px] text-green-600 mt-1 hidden font-bold">Chave PIX copiada!</p>
                                     </div>
@@ -155,17 +153,27 @@
                             </div>
                         </div>
 
-                        <!-- CARD 2: Regra Financeira -->
+                        <!-- CARD CAMISETA PERSONALIZADA (NOVO) -->
+                        <div class="glass-panel rounded-xl p-6 border-l-4 border-indigo-500 bg-gradient-to-r from-white to-indigo-50">
+                            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                                <div>
+                                    <h3 class="text-xl font-bold text-slate-800 flex items-center"><i class="fas fa-tshirt mr-2 text-indigo-600"></i> Quero Minha Camiseta!</h3>
+                                    <p class="text-sm text-slate-600 mt-1">Garanta o uniforme oficial da torcida Gandra 2026. Personalize com seu nome!</p>
+                                </div>
+                                <a href="https://wa.me/5522998905592?text=Olá! Quero encomendar minha Camiseta Oficial Gandra 2026." target="_blank" class="px-5 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-bold shadow-lg transform hover:scale-105 transition-all text-center whitespace-nowrap">
+                                    👕 Encomendar Agora
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- CARD REGRA FINANCEIRA -->
                         <div class="glass-panel rounded-xl p-6 border border-slate-200 bg-slate-50/50">
-                            <h3 class="text-lg font-bold text-slate-800 mb-3 flex items-center">
-                                <i class="fas fa-wallet mr-2 text-slate-500"></i> Como funciona o Pagamento?
-                            </h3>
+                            <h3 class="text-lg font-bold text-slate-800 mb-3 flex items-center"><i class="fas fa-wallet mr-2 text-slate-500"></i> Regra do Pagamento</h3>
                             <div class="text-sm text-slate-600 space-y-2">
-                                <p><strong>💰 Investimento Total Estimado:</strong> R$ 400,00 por pessoa (Adulto).</p>
-                                <p><strong>📅 Parcelamento:</strong> 4x de R$ 100,00 (Vencimento dia 10 de Jan, Fev, Mar e Abr).</p>
+                                <p><strong>💰 Investimento:</strong> R$ 400,00 (4x de R$ 100,00 - Jan a Abr).</p>
                                 <div class="bg-yellow-50 border border-yellow-200 p-3 rounded-lg mt-2">
-                                    <p class="text-yellow-800 text-xs font-bold">💡 INSIGHT DE DIAMANTE:</p>
-                                    <p class="text-yellow-700 text-xs">Os <span class="font-bold">R$ 10,00</span> da taxa de inscrição serão <span class="underline">descontados</span> da sua primeira parcela ou do valor total. Você não paga a mais!</p>
+                                    <p class="text-yellow-800 text-xs font-bold">💡 INSIGHT:</p>
+                                    <p class="text-yellow-700 text-xs">Os <span class="font-bold">R$ 10,00</span> da inscrição serão <span class="underline">descontados</span> da 1ª parcela.</p>
                                 </div>
                             </div>
                         </div>
@@ -175,94 +183,106 @@
                     <!-- COLUNA 2: KIT DIVULGAÇÃO (Ocupa 1 espaço) -->
                     <div class="lg:col-span-1 glass-panel rounded-xl p-6 border border-cyan-200 bg-gradient-to-b from-white to-cyan-50 flex flex-col items-center text-center h-fit sticky top-6">
                         <h3 class="text-lg font-bold text-slate-800 mb-2">📢 Kit Divulgação</h3>
-                        <p class="text-xs text-slate-500 mb-4">Baixe o convite e poste no status!</p>
-                        
-                        <!-- Preview do Convite -->
+                        <p class="text-xs text-slate-500 mb-4">Baixe o convite e poste!</p>
                         <div class="w-40 h-72 bg-slate-200 rounded-lg shadow-md mb-4 overflow-hidden relative group cursor-pointer border-4 border-white">
-                            <img src="./convite.png" 
-                                 onerror="this.src='https://placehold.co/108x192?text=Sem+Imagem'; this.parentElement.style.opacity='0.5';"
-                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
-                                 alt="Preview Convite">
+                            <img src="./convite.png" onerror="this.src='https://placehold.co/108x192?text=Sem+Imagem'; this.parentElement.style.opacity='0.5';" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                         </div>
-
-                        <!-- Botão Download -->
                         <a href="./convite.png" download="Convite_ConectGandra2026.png" class="w-full py-3 bg-cyan-600 hover:bg-cyan-700 text-white rounded-xl font-bold text-sm shadow-lg hover:shadow-cyan-200/50 transition-all flex items-center justify-center gap-2 transform hover:-translate-y-1">
-                            <i class="fas fa-download"></i>
-                            Baixar Imagem
+                            <i class="fas fa-download"></i> Baixar Imagem
                         </a>
                     </div>
-
                 </div>
             </section>
 
-            <!-- SECTION: CRONOGRAMA -->
-            <section id="timeline" class="page-section hidden space-y-6">
+            <!-- SECTION: AGENDA DO DIA (ANTIGO ROTEIRO) -->
+            <section id="agenda" class="page-section hidden space-y-6">
                 <header class="mb-8">
-                    <h2 class="text-3xl font-bold text-slate-800">Cronograma</h2>
-                    <p class="text-slate-600">Datas importantes para o pagamento.</p>
-                </header>
-                <!-- Timeline simplificada para pagamentos -->
-                <div class="space-y-4">
-                    <div class="flex items-center gap-4 bg-white p-4 rounded-lg shadow-sm border-l-4 border-green-500">
-                        <div class="font-bold text-green-600 w-16">AGORA</div>
-                        <div><h4 class="font-bold">Inscrição</h4><p class="text-xs text-slate-500">Pagamento da taxa de R$ 10,00</p></div>
-                    </div>
-                    <div class="flex items-center gap-4 bg-white p-4 rounded-lg shadow-sm border-l-4 border-slate-300 opacity-75">
-                        <div class="font-bold text-slate-500 w-16">10 JAN</div>
-                        <div><h4 class="font-bold">1ª Parcela</h4><p class="text-xs text-slate-500">R$ 100,00 (Menos desconto da taxa)</p></div>
-                    </div>
-                    <div class="flex items-center gap-4 bg-white p-4 rounded-lg shadow-sm border-l-4 border-slate-300 opacity-75">
-                        <div class="font-bold text-slate-500 w-16">10 FEV</div>
-                        <div><h4 class="font-bold">2ª Parcela</h4><p class="text-xs text-slate-500">R$ 100,00</p></div>
-                    </div>
-                    <div class="flex items-center gap-4 bg-white p-4 rounded-lg shadow-sm border-l-4 border-slate-300 opacity-75">
-                        <div class="font-bold text-slate-500 w-16">10 MAR</div>
-                        <div><h4 class="font-bold">3ª Parcela</h4><p class="text-xs text-slate-500">R$ 100,00</p></div>
-                    </div>
-                    <div class="flex items-center gap-4 bg-white p-4 rounded-lg shadow-sm border-l-4 border-slate-300 opacity-75">
-                        <div class="font-bold text-slate-500 w-16">10 ABR</div>
-                        <div><h4 class="font-bold">4ª Parcela Final</h4><p class="text-xs text-slate-500">R$ 100,00</p></div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- SECTION: ROTEIRO -->
-            <section id="itinerary" class="page-section hidden space-y-6">
-                <header class="mb-8">
-                    <h2 class="text-3xl font-bold text-slate-800">Roteiro do Dia</h2>
-                    <p class="text-slate-600">19 de Abril de 2026 - Domingo</p>
+                    <h2 class="text-3xl font-bold text-slate-800">Agenda do Dia</h2>
+                    <p class="text-slate-600">19 de Abril de 2026 - O Nosso Legado em Campo</p>
                 </header>
                 <div class="glass-panel rounded-xl overflow-hidden shadow-sm">
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
+                        <table class="w-full text-left border-collapse min-w-[600px]">
                             <thead>
                                 <tr class="bg-slate-50 border-b border-slate-200 text-xs uppercase text-slate-500 font-bold">
-                                    <th class="p-5 w-24">Horário</th>
-                                    <th class="p-5">Atividade</th>
+                                    <th class="p-4 w-20">Horário</th>
+                                    <th class="p-4 w-1/3">Atividade</th>
+                                    <th class="p-4">Equipe Responsável</th>
+                                    <th class="p-4">Contato</th>
                                 </tr>
                             </thead>
                             <tbody class="text-sm divide-y divide-slate-100">
-                                <tr><td class="p-4 font-bold text-cyan-700">09:00</td><td class="p-4">Check-in & Café Raiz</td></tr>
-                                <tr><td class="p-4 font-bold text-cyan-700">09:40</td><td class="p-4">Culto de Gratidão</td></tr>
-                                <tr><td class="p-4 font-bold text-cyan-700">10:45</td><td class="p-4">Futebol: O Grande Clássico</td></tr>
-                                <tr><td class="p-4 font-bold text-cyan-700">12:30</td><td class="p-4">Almoço (Churrasco Liberado)</td></tr>
-                                <tr><td class="p-4 font-bold text-cyan-700">15:00</td><td class="p-4">Bingo & Sorteios</td></tr>
-                                <tr><td class="p-4 font-bold text-cyan-700">17:00</td><td class="p-4">Encerramento</td></tr>
+                                <tr class="hover:bg-slate-50">
+                                    <td class="p-4 font-bold text-cyan-700">09:00</td>
+                                    <td class="p-4 font-medium">Check-in & Café Raiz</td>
+                                    <td class="p-4 text-slate-400 italic border-l border-slate-100">Nome: __________________</td>
+                                    <td class="p-4 text-slate-400 italic">Tel: __________________</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50">
+                                    <td class="p-4 font-bold text-cyan-700">09:40</td>
+                                    <td class="p-4 font-medium">Culto de Gratidão</td>
+                                    <td class="p-4 text-slate-400 italic border-l border-slate-100">Nome: __________________</td>
+                                    <td class="p-4 text-slate-400 italic">Tel: __________________</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50">
+                                    <td class="p-4 font-bold text-cyan-700">10:45</td>
+                                    <td class="p-4 font-medium">Futebol: O Clássico</td>
+                                    <td class="p-4 text-slate-400 italic border-l border-slate-100">Nome: __________________</td>
+                                    <td class="p-4 text-slate-400 italic">Tel: __________________</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50">
+                                    <td class="p-4 font-bold text-cyan-700">11:45</td>
+                                    <td class="p-4 font-medium">Gincana da Família</td>
+                                    <td class="p-4 text-slate-400 italic border-l border-slate-100">Nome: __________________</td>
+                                    <td class="p-4 text-slate-400 italic">Tel: __________________</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50">
+                                    <td class="p-4 font-bold text-cyan-700">12:30</td>
+                                    <td class="p-4 font-medium">Almoço (Churrasco)</td>
+                                    <td class="p-4 text-slate-400 italic border-l border-slate-100">Nome: __________________</td>
+                                    <td class="p-4 text-slate-400 italic">Tel: __________________</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50">
+                                    <td class="p-4 font-bold text-cyan-700">15:00</td>
+                                    <td class="p-4 font-medium">Bingo & Sorteios</td>
+                                    <td class="p-4 text-slate-400 italic border-l border-slate-100">Nome: __________________</td>
+                                    <td class="p-4 text-slate-400 italic">Tel: __________________</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50">
+                                    <td class="p-4 font-bold text-cyan-700">17:00</td>
+                                    <td class="p-4 font-medium">Encerramento</td>
+                                    <td class="p-4 text-slate-400 italic border-l border-slate-100">Nome: __________________</td>
+                                    <td class="p-4 text-slate-400 italic">Tel: __________________</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </section>
 
-            <!-- SECTION: TRANSPARÊNCIA FINANCEIRA -->
+            <!-- OUTRAS SEÇÕES (TIMELINE, BUDGET) -->
+            <section id="timeline" class="page-section hidden space-y-6">
+                <header class="mb-8"><h2 class="text-3xl font-bold text-slate-800">Cronograma</h2><p class="text-slate-600">Programe-se para não perder o prazo.</p></header>
+                <div class="space-y-4">
+                    <div class="flex items-center gap-4 bg-white p-4 rounded-lg shadow-sm border-l-4 border-green-500">
+                        <div class="font-bold text-green-600 w-16">AGORA</div>
+                        <div><h4 class="font-bold">Inscrição</h4><p class="text-xs text-slate-500">Taxa de R$ 10,00</p></div>
+                    </div>
+                    <div class="flex items-center gap-4 bg-white p-4 rounded-lg shadow-sm border-l-4 border-slate-300 opacity-75">
+                        <div class="font-bold text-slate-500 w-16">10 JAN</div>
+                        <div><h4 class="font-bold">1ª Parcela</h4><p class="text-xs text-slate-500">R$ 100,00 (Menos desc.)</p></div>
+                    </div>
+                    <div class="flex items-center gap-4 bg-white p-4 rounded-lg shadow-sm border-l-4 border-slate-300 opacity-75">
+                        <div class="font-bold text-slate-500 w-16">10 FEV/MAR/ABR</div>
+                        <div><h4 class="font-bold">Demais Parcelas</h4><p class="text-xs text-slate-500">R$ 100,00/mês</p></div>
+                    </div>
+                </div>
+            </section>
+
             <section id="budget" class="page-section hidden space-y-6">
-                <header class="mb-8">
-                    <h2 class="text-3xl font-bold text-slate-800">Transparência</h2>
-                    <p class="text-slate-600">Para onde vai o seu dinheiro?</p>
-                </header>
+                <header class="mb-8"><h2 class="text-3xl font-bold text-slate-800">Transparência</h2><p class="text-slate-600">Estimativa de Custos</p></header>
                 <div class="glass-panel p-6 rounded-xl border border-slate-200 flex flex-col items-center justify-center">
                     <div class="chart-container"><canvas id="budgetChart"></canvas></div>
-                    <p class="text-xs text-center text-slate-400 mt-4 italic">Estimativa de custos do evento.</p>
                 </div>
             </section>
 
@@ -270,16 +290,31 @@
     </div>
 
     <script>
-        // --- LÓGICA DO PIX E NAVEGAÇÃO ---
+        // --- FUNÇÕES GERAIS ---
+        const audio = document.getElementById("bgMusic");
+        const musicBtn = document.getElementById("musicToggle");
+        const musicIcon = document.getElementById("musicIcon");
+        let isPlaying = false;
+
+        function toggleMusic() {
+            if (isPlaying) {
+                audio.pause();
+                musicIcon.classList.remove("fa-pause"); musicIcon.classList.add("fa-play");
+                musicBtn.classList.remove("music-playing");
+            } else {
+                audio.play().then(() => {
+                    musicIcon.classList.remove("fa-play"); musicIcon.classList.add("fa-pause");
+                    musicBtn.classList.add("music-playing");
+                }).catch(e => alert("Toque na tela para liberar o áudio!"));
+            }
+            isPlaying = !isPlaying;
+        }
 
         function copyPix() {
-            // Se a chave PIX for diferente do celular, altere aqui:
             const pixKey = "22998905592"; 
-            
             navigator.clipboard.writeText(pixKey).then(() => {
                 const msg = document.getElementById('copyMsg');
-                msg.classList.remove('hidden');
-                setTimeout(() => msg.classList.add('hidden'), 3000);
+                msg.classList.remove('hidden'); setTimeout(() => msg.classList.add('hidden'), 3000);
             });
         }
 
@@ -288,30 +323,22 @@
             document.getElementById(targetId).classList.remove('hidden');
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('nav-active'));
             document.querySelector(`[data-target="${targetId}"]`).classList.add('nav-active');
-            
             if (window.innerWidth < 768) {
-                const sidebar = document.getElementById('sidebar');
-                if(!sidebar.classList.contains('hidden')) sidebar.classList.add('hidden');
+                document.getElementById('sidebar').classList.add('hidden');
             }
         }
 
-        // Gráfico Financeiro
         document.addEventListener('DOMContentLoaded', () => {
             const ctx = document.getElementById('budgetChart').getContext('2d');
             new Chart(ctx, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Alimentação (Churrasco)', 'Bebidas', 'Locação Estádio', 'Estrutura/Som'],
-                    datasets: [{
-                        data: [45, 25, 15, 15], 
-                        backgroundColor: ['#ef4444', '#f59e0b', '#64748b', '#0ea5e9'],
-                        borderWidth: 0
-                    }]
+                    labels: ['Alimentação', 'Bebidas', 'Locação', 'Estrutura'],
+                    datasets: [{ data: [45, 25, 15, 15], backgroundColor: ['#ef4444', '#f59e0b', '#64748b', '#0ea5e9'], borderWidth: 0 }]
                 },
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
             });
 
-            // Mobile Menu Toggle
             document.getElementById('mobile-menu-btn').addEventListener('click', () => {
                 const s = document.getElementById('sidebar');
                 s.classList.toggle('hidden'); s.classList.toggle('absolute'); s.classList.toggle('z-50'); s.classList.toggle('w-full');
